@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ReplaceAllBlocks
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            try {
+                foreach (string f in Directory.GetFiles(@"D:\test\test")) {
+                    string[] strIn = File.ReadAllLines(f);
+                    List<string> strOutList = new List<string>();
+                    string saveStr = "";
+                    foreach (string s in strIn) {
+                        if (s.Contains("ims14"))
+                        {
+                            saveStr += s + Environment.NewLine;
+                        }
+                        else {
+                            if (saveStr != "") {
+                                strOutList.Add(saveStr);
+                                strOutList.Add(saveStr.Replace("ims14","ims15"+Environment.NewLine+"OR"));
+                            }
+                            saveStr = "";
+                            strOutList.Add(s);
+                        }
+                    }
+                    if (saveStr != "") {
+                        strOutList.Add(saveStr);
+                        strOutList.Add(saveStr.Replace("ims14", "ims15" + Environment.NewLine + "OR"));
+                        saveStr = "";
+                    }
+                    File.WriteAllLines(@"D:\test\test\" + "out" + Path.GetFileNameWithoutExtension(f) + ".txt" ,strOutList);
+                }
+            }
+            catch (Exception ex) {
+                Console.WriteLine("Exception: " + ex.Message);
+            }
+            Console.ReadLine();
+        }
+    }
+}
